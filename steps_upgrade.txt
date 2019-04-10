@@ -1,0 +1,27 @@
+1 - Take a full backup from all databses (mysqldump -uroot -p --events --routines --triggers --all-databases > /opt/backup/bkp_full_pre_upgrade.dmp)
+
+2 - Take a backup from /etc/my.cnf
+
+3 - Stop MariaDB services -> systemctl stop mariadb.service
+
+4 - Take a backup from /var/lib/mysql -> cp -R /var/lib/mysql /var/lib/mysql_bkp
+
+5 - Start MariaDB services -> systemctl start mariadb.service
+
+5 - Create a yum repository file -> touch /etc/yum.repos.d/MariaDB.repo
+
+6 - Insert the below lines at the file MariaDB.repo
+
+# MariaDB 10.3 CentOS repository list - created 2019-04-05 12:06 UTC
+# http://downloads.mariadb.org/mariadb/repositories/
+[mariadb]
+name = MariaDB
+baseurl = http://yum.mariadb.org/10.3/centos7-amd64
+gpgkey=https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
+gpgcheck=1
+
+7 - Execute yum install MariaDB-client MariaDB-server
+
+8 - Start mariadb.service -> systemctl start mariadb.service
+
+9 - Run mysql_upgrade -> mysql_upgrade -uroot -p
